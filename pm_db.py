@@ -77,34 +77,34 @@ class Database:
         query = select('*').select_from(PasswordEntry)
         result = self.__execute(self.__session, query).mappings().fetchall()
 
-        print(result)
+        return result
 
     def show_select(self, identifier: int):
         query = select('*').select_from(PasswordEntry).where(PasswordEntry.identifier == identifier)
         result = self.__execute(self.__session, query).mappings().fetchone()
 
-        print(result)
+        return result
 
     def delete_db(self):
         pass
 
-def main():
-    database = Database()
-    database.connect(PM_DB_URL)
-    #database.add_password("tmp_association", "tmp_name", "tmp_password")
-    #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
+# def main():
+#     database = Database()
+#     database.connect(PM_DB_URL)
+#     #database.add_password("tmp_association", "tmp_name", "tmp_password")
+#     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
-    # database.update_username(8, "new_username")
-    # database.update_username(1, "new_username")
-    # database.update_username(2, "new_username2")
-    # database.update_username(-3, "new_username")
-    # database.delete_entry(1)
-    # database.update_password(4, "this_is_a_test!")
-    # database.update_association(3, "JKJKJKJKJ   dddd")
-    database.show_all()
-    #database.show_select(1)
+#     # database.update_username(8, "new_username")
+#     # database.update_username(1, "new_username")
+#     # database.update_username(2, "new_username2")
+#     # database.update_username(-3, "new_username")
+#     # database.delete_entry(1)
+#     # database.update_password(4, "this_is_a_test!")
+#     # database.update_association(3, "JKJKJKJKJ   dddd")
+#     database.show_all()
+#     #database.show_select(1)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
 
 
