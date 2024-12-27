@@ -11,54 +11,78 @@ from pm_db import Database, PasswordEntry
 class PwdGUI():
     def __init__(self):
         self.__root = tk.Tk()
+        self.__root.title("Password Manager")
+        self.__root.minsize(600, 400)
+        self.__root.maxsize(600, 400)
+        self.__root.geometry("600x400")
 
-def search_pwd(database: Database, search_var: tk.Entry):
-    #result = database.show_select(search_var)
-    print(search_var.get())
-    print("TESTING")
+        self.__db = Database()
+        self.__db.connect(consts.PM_DB_URL)
+
+        #self.__search_btn = tk.Button(self.__root, text="Search", command=self.search_pwd)
+
+    def __create_table(self):
+        pass
+
+    def __search(self):
+        self.__table_text.destroy()
+        self.__search_btn.destroy()
+
+        pwd = self.__db.show_select(self.__search_entry.get())
+        self.__search_entry.destroy()
+
+        text = tk.Text(self.__root, width=50, height=500, bg="light blue")
+
+        table = PrettyTable()
+        table.field_names = ["association", "username", "password"]
+        table.add_row([pwd["association"], pwd["username"], pwd["password"]])
+        
+        text.insert(1.0, table)
+        text.pack(side="right")
+        text.configure(state="disabled")
+
+    def search_pwd(self):
+        self.__search_entry = tk.Entry(self.__root)
+        self.__search_entry.pack()
+        self.__search_btn = tk.Button(self.__root, text="Search", command=self.__search)
+        self.__search_btn.pack()
+        
+
+    def show_all(self):
+        passwords = self.__db.show_all()
+
+        self.__table_text = scrolledtext.ScrolledText(self.__root, width=50, height=500, bg="light blue")
+        table = PrettyTable()
+
+        table.field_names = ["association", "username", "password"]
+        for pwd in passwords:
+            table.add_row([pwd["association"], pwd["username"], pwd["password"]])
+
+        self.__table_text.insert(1.0, table)
+        self.__table_text.pack(side="right")
+        self.__table_text.configure(state="disabled")
+
+
+    def mainloop(self):
+        self.__root.mainloop()
+
+
 
 def main():
-    root = tk.Tk()
-    root.title("Password Manager")
-    root.configure(background="pink")
+    gui = PwdGUI()
+    gui.show_all()
+    gui.search_pwd()
+    gui.mainloop()
 
-    root.minsize(600, 400)
-    root.maxsize(600, 400)
-    root.geometry("600x500")
+    # search = tk.Entry(root)
+    # search.pack()
 
-    database = Database()
-    database.connect(consts.PM_DB_URL)
-    #database.add_password("tmp_association", "tmp_username", "tmp_password")
-    #database.add_password("YAGEO", "fuck head", "crap")
-    #database.add_password("HHHHHHHHH", "help me", "please")
-    passwords = database.show_all()
+    # def tmp_func():
+    #     text = search.get()
+    #     print(text)
 
-
-    #table_text = tk.Text(window, bg="light blue")
-    table_text = scrolledtext.ScrolledText(root, width=50, height=500, bg="light blue")
-    table = PrettyTable()
-    #table.padding_width = 2
-
-    table.field_names = ["association", "username", "password"]
-
-    for pwd in passwords:
-        table.add_row([pwd["association"], pwd["username"], pwd["password"]])
-
-    table_text.insert(1.0, table)
-    #table_text.grid(row=0, column=2)
-    table_text.pack(side="right")
-    table_text.configure(state="disabled")
-
-
-    search = tk.Entry(root)
-    search.pack()
-
-    def tmp_func():
-        text = search.get()
-        print(text)
-
-    search_btn = tk.Button(root, text="Search", command=tmp_func)
-    search_btn.pack()
+    # search_btn = tk.Button(root, text="Search", command=tmp_func)
+    # search_btn.pack()
 
  
 
@@ -74,7 +98,7 @@ def main():
     # tk.Label(frame, text="hello world").grid()
     # tk.Button(frame, text="Quit", command=root.destroy).grid(column=1, row=0)
 
-    root.mainloop()
+
 
 if __name__ == "__main__":
     main()

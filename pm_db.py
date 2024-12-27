@@ -82,7 +82,7 @@ class Database:
     def show_select(self, identifier: int):
         query = select('*').select_from(PasswordEntry).where(PasswordEntry.identifier == identifier)
         result = self.__execute(self.__session, query).mappings().fetchone()
-        #print(result)
+
         return result
 
     def delete_db(self):
