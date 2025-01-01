@@ -25,17 +25,19 @@ class PwdGUI():
         pass
 
     def __search(self):
+        passwords = self.__db.show_select(self.__search_entry.get())
+
         self.__table_text.destroy()
         self.__search_btn.destroy()
-
-        pwd = self.__db.show_select(self.__search_entry.get())
         self.__search_entry.destroy()
 
         text = tk.Text(self.__root, width=50, height=500, bg="light blue")
+        #text = scrolledtext.ScrolledText(self.__root, width=50, height=500, bg="light blue")
 
         table = PrettyTable()
         table.field_names = ["association", "username", "password"]
-        table.add_row([pwd["association"], pwd["username"], pwd["password"]])
+        for pwd in passwords:
+            table.add_row([pwd["association"], pwd["username"], pwd["password"]])
         
         text.insert(1.0, table)
         text.pack(side="right")
@@ -46,7 +48,9 @@ class PwdGUI():
         self.__search_entry.pack()
         self.__search_btn = tk.Button(self.__root, text="Search", command=self.__search)
         self.__search_btn.pack()
-        
+
+    def delete_pwd(self):
+        pass
 
     def show_all(self):
         passwords = self.__db.show_all()
