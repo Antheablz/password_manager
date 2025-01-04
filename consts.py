@@ -10,3 +10,6 @@ DEFAULT_DB_URL = f'postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB
 PM_DB_URL = f'postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB_PM}'
 
 PWD_TABLE_NAME = "passwords"
+
+TABLE_WIDTH = 55
+TABLE_HEIGHT = 30
