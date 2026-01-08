@@ -18,7 +18,7 @@ class PasswordEntry(Base):
 
     identifier = mapped_column(Integer, primary_key=True, autoincrement=True)
     association = mapped_column(String, nullable=False)
-    username = mapped_column(String, nullable=False,)
+    username = mapped_column(String, nullable=False)
     password = mapped_column(String, nullable=False)
 
 
@@ -91,14 +91,17 @@ class Database:
 # def main():
 #     database = Database()
 #     database.connect(PM_DB_URL)
-#     #database.add_password("tmp_association", "tmp_name", "tmp_password")
+#     database.add_password("tmp_association", "tmp_name", "tmp_password")
 #     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
 #     # database.update_username(8, "new_username")
 #     # database.update_username(1, "new_username")
 #     # database.update_username(2, "new_username2")
 #     # database.update_username(-3, "new_username")
-#     # database.delete_entry(1)
+#     # for i in range(0,51):
+#     #     database.delete_entry(i)
+   
+
 #     # database.update_password(4, "this_is_a_test!")
 #     # database.update_association(3, "JKJKJKJKJ   dddd")
 #     database.show_all()
