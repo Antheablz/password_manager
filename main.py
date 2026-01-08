@@ -111,52 +111,20 @@ class PwdGUI():
         self.__refresh_table()
         self.show_all()
 
-   
-        
-
-        
-     
-
-    # def __add(self):
-    #     #self.__left_frame.grid_forget()
-    #     self.__add_frame.grid_rowconfigure([0,1,2,3,4,5], uniform="uniform", weight=1)
-    #     self.__add_frame.grid_columnconfigure([0,1,2], uniform="uniform", weight=1)
-    #     self.__add_frame.grid(row=0, column=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
-    #     self.__back_btn.grid(row=0, column=1)
-
-
-
-
-    # def search_pwd(self):
-        
-        # self.__search_btn = tk.Button(self.__left_frame, text="Search", command=self.__search)
-
-        # self.__search_entry.grid(row=0, column=0, columnspan=3)
-        # self.__search_btn.grid(row=1, column=1)
-        
-
-
     def edit_pwd(self):
         pass
 
     def show_all(self):
         passwords = self.__db.show_all()
         self.__create_table(passwords)
-
-        # self.__back_btn.grid_forget()
-        # self.__add_frame.grid_forget()
         
 
     def mainloop(self):
         self.__root.mainloop()
 
 
-
 def main():
     gui = PwdGUI()
-    # gui.show_all()
-    # gui.search_pwd()
-
 
     gui.mainloop()
 
