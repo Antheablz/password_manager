@@ -4,7 +4,7 @@ import consts
 
 from prettytable import PrettyTable
 from sqlalchemy import *
-from tkinter import scrolledtext
+from tkinter import scrolledtext, ttk
 
 from pm_db import Database, PasswordEntry
 
@@ -12,65 +12,140 @@ class PwdGUI():
     def __init__(self):
         self.__root = tk.Tk()
         self.__root.title("Password Manager")
-        self.__root.minsize(600, 400)
-        self.__root.maxsize(600, 400)
-        self.__root.geometry("600x400")
 
-        self.__left_frame = tk.Frame(self.__root, width=200, height=400, bg="light blue")
-        self.__left_frame.grid_rowconfigure([0,1,2,3,4,5,6,7,8,9], uniform="uniform", weight=1)
-        self.__left_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.__root.columnconfigure(0, weight=1)
+        # self.__root.columnconfigure(1, weight=2)
+        self.__root.rowconfigure(0, weight=1)
 
-        self.__right_frame = tk.Frame(self.__root, width=400, height=400, bg="light green")
-        self.__right_frame.grid(row=0, column=1, sticky=tk.NSEW)
+        self.__left_frame = tk.Frame(self.__root) #frame is just a container
+        # self.__left_frame.grid(row=0, column=0, sticky=tk.NSEW)
+        self.__left_frame.grid(row=0, column=0)
+        self.__left_frame.columnconfigure(0, weight=1)
+        self.__left_frame.rowconfigure(1, weight=1)
 
-        self.__back_btn = tk.Button(self.__left_frame, text="back", command=self.show_all)
+        self.__right_frame = tk.Frame(self.__root) #frame is just a container
+        # self.__right_frame.grid(row=1, column=0, sticky=tk.NSEW)
+        self.__right_frame.grid(row=1, column=0)
+        self.__right_frame.columnconfigure(0, weight=1)
+        self.__right_frame.rowconfigure(1, weight=1)
+
+
+        self.__search_btn = tk.Button(self.__left_frame, text="Search", command=self.__search)
+        self.__search_btn.grid(row=0, column=1)
+        self.__search_entry = tk.Entry(self.__left_frame)
+        self.__search_entry.grid(row=0, column=2)
+
+        self.__home_btn = tk.Button(self.__left_frame, text="Back Home", command=self.__back_home)
+        self.__home_btn.grid(row=0, column=4)
+
+        self.__delete_btn = tk.Button(self.__left_frame, text="Delete Pwd")
+        self.__delete_btn.grid(row=0, column=5)
+
+
+        self.__add_btn = tk.Button(self.__left_frame, text="Add Pwd", command=self.__add_record)
+        self.__add_btn.grid(row=4, column=0)
+        
+        association_text = tk.StringVar()
+        association_text.set("Association: ")
+        association_label = tk.Label(self.__left_frame, textvariable=association_text)
+        association_label.grid(row=4, column=1)
+        self.__association = tk.Entry(self.__left_frame)
+        self.__association.grid(row=4, column=2)
+
+        username_text = tk.StringVar()
+        username_text.set("Username: ")
+        username_label = tk.Label(self.__left_frame, textvariable=username_text)
+        username_label.grid(row=4, column=3)
+        self.__username = tk.Entry(self.__left_frame)
+        self.__username.grid(row=4, column=4)
+
+        password_text = tk.StringVar()
+        password_text.set("Password: ")
+        pasword_label = tk.Label(self.__left_frame, textvariable=password_text)
+        pasword_label.grid(row=4, column=5)
+        self.__password = tk.Entry(self.__left_frame)
+        self.__password.grid(row=4, column=6)
+
+
+
+        self.__table_headers = ["identifier", "association", "username", "header_4"]
+        self.__tree = ttk.Treeview(self.__right_frame, columns=self.__table_headers, show="headings")
+
 
         self.__db = Database()
         self.__db.connect(consts.PM_DB_URL)
 
+        self.show_all()
+
+    def __refresh_table(self):
+        for i in self.__tree.get_children():
+            self.__tree.delete(i)
+
+    def __back_home(self):
+        self.__refresh_table()
+        self.show_all()
+
     def __create_table(self, passwords):
-        self.__table_text = tk.Text(self.__right_frame, width=consts.TABLE_WIDTH, height=consts.TABLE_HEIGHT)
-        table = PrettyTable()
-        table._min_table_width = consts.TABLE_WIDTH
-        table._max_table_width = consts.TABLE_WIDTH
+        self.__tree.heading(0, text=self.__table_headers[0])
+        self.__tree.heading(1, text=self.__table_headers[1])
+        self.__tree.heading(2, text=self.__table_headers[2])
 
-        table.field_names = ["association", "username", "password"]
         for pwd in passwords:
-            table.add_row([pwd["association"], pwd["username"], pwd["password"]])
+            self.__tree.insert("", tk.END, values=(pwd["identifier"], pwd["association"], pwd["username"]))
 
-        self.__table_text.insert(1.0, table)
-        self.__table_text.place(relx=0.5, rely=0.5, anchor="center")
-        self.__table_text.configure(state="disabled")
+        self.__tree.pack()
+
 
     def __search(self):
         passwords = self.__db.show_select(self.__search_entry.get())
+        self.__refresh_table()
         self.__create_table(passwords)
-        self.__back_btn.grid(row=9, column=0)
-        #self.__back_btn.place(relx=0.5, rely=0.95, anchor="center")
 
-    def search_pwd(self):
-        self.__search_entry = tk.Entry(self.__left_frame)
-        self.__search_btn = tk.Button(self.__left_frame, text="Search", command=self.__search)
+    def __add_record(self):
+        
+        self.__db.add_password(self.__association.get(), self.__username.get(), self.__password.get())
+        self.__association.delete(0, "end")
+        self.__username.delete(0, "end")
+        self.__password.delete(0, "end")
 
-        self.__search_entry.grid(row=0, column=0)
-        self.__search_btn.grid(row=1, column=0)
-        #self.__search_entry.place(relx=0.5, rely=0.1, anchor="center")
-        #self.__search_btn.place(relx=0.5, rely=0.175, anchor="center")
+        self.__refresh_table()
+        self.show_all()
 
-    def add_pwd(self):
+   
+        
+
+        
+     
+
+    # def __add(self):
+    #     #self.__left_frame.grid_forget()
+    #     self.__add_frame.grid_rowconfigure([0,1,2,3,4,5], uniform="uniform", weight=1)
+    #     self.__add_frame.grid_columnconfigure([0,1,2], uniform="uniform", weight=1)
+    #     self.__add_frame.grid(row=0, column=0, sticky=tk.NSEW, rowspan=2, columnspan=1)
+    #     self.__back_btn.grid(row=0, column=1)
+
+
+
+
+    # def search_pwd(self):
+        
+        # self.__search_btn = tk.Button(self.__left_frame, text="Search", command=self.__search)
+
+        # self.__search_entry.grid(row=0, column=0, columnspan=3)
+        # self.__search_btn.grid(row=1, column=1)
+        
+
+
+    def edit_pwd(self):
         pass
-
-    def update_pwd(self):
-        pass
-
-    def delete_pwd(self):
-        delete_btn = tk.Button(self.__left_frame, text="Delete Pwd")
-
 
     def show_all(self):
         passwords = self.__db.show_all()
         self.__create_table(passwords)
-        self.__back_btn.grid_forget()
+
+        # self.__back_btn.grid_forget()
+        # self.__add_frame.grid_forget()
+        
 
     def mainloop(self):
         self.__root.mainloop()
@@ -79,8 +154,10 @@ class PwdGUI():
 
 def main():
     gui = PwdGUI()
-    gui.search_pwd()
-    gui.show_all()
+    # gui.show_all()
+    # gui.search_pwd()
+
+
     gui.mainloop()
 
 if __name__ == "__main__":
