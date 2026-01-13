@@ -17,59 +17,59 @@ class PwdGUI():
         # self.__root.columnconfigure(1, weight=2)
         self.__root.rowconfigure(0, weight=1)
 
-        self.__left_frame = tk.Frame(self.__root) #frame is just a container
+        self.__top_frame = tk.Frame(self.__root) #frame is just a container
         # self.__left_frame.grid(row=0, column=0, sticky=tk.NSEW)
-        self.__left_frame.grid(row=0, column=0)
-        self.__left_frame.columnconfigure(0, weight=1)
-        self.__left_frame.rowconfigure(1, weight=1)
+        self.__top_frame.grid(row=0, column=0)
+        self.__top_frame.columnconfigure(0, weight=1)
+        self.__top_frame.rowconfigure(1, weight=1)
 
-        self.__right_frame = tk.Frame(self.__root) #frame is just a container
+        self.__bottom_frame = tk.Frame(self.__root) #frame is just a container
         # self.__right_frame.grid(row=1, column=0, sticky=tk.NSEW)
-        self.__right_frame.grid(row=1, column=0)
-        self.__right_frame.columnconfigure(0, weight=1)
-        self.__right_frame.rowconfigure(1, weight=1)
+        self.__bottom_frame.grid(row=1, column=0)
+        self.__bottom_frame.columnconfigure(0, weight=1)
+        self.__bottom_frame.rowconfigure(1, weight=1)
 
 
-        self.__search_btn = tk.Button(self.__left_frame, text="Search", command=self.__search)
+        self.__search_btn = tk.Button(self.__top_frame, text="Search", command=self.__search)
         self.__search_btn.grid(row=0, column=1)
-        self.__search_entry = tk.Entry(self.__left_frame)
+        self.__search_entry = tk.Entry(self.__top_frame)
         self.__search_entry.grid(row=0, column=2)
 
-        self.__home_btn = tk.Button(self.__left_frame, text="Clear", command=self.__back_home)
+        self.__home_btn = tk.Button(self.__top_frame, text="Clear", command=self.__back_home)
         self.__home_btn.grid(row=0, column=4)
 
-        self.__delete_btn = tk.Button(self.__left_frame, text="Delete Pwd")
+        self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd")
         self.__delete_btn.grid(row=0, column=5)
 
 
-        self.__add_btn = tk.Button(self.__left_frame, text="Add Pwd", command=self.__add_record)
+        self.__add_btn = tk.Button(self.__top_frame, text="Add Pwd", command=self.__add_record)
         self.__add_btn.grid(row=4, column=0)
         
         association_text = tk.StringVar()
         association_text.set("Association: ")
-        association_label = tk.Label(self.__left_frame, textvariable=association_text)
+        association_label = tk.Label(self.__top_frame, textvariable=association_text)
         association_label.grid(row=4, column=1)
-        self.__association = tk.Entry(self.__left_frame)
+        self.__association = tk.Entry(self.__top_frame)
         self.__association.grid(row=4, column=2)
 
         username_text = tk.StringVar()
         username_text.set("Username: ")
-        username_label = tk.Label(self.__left_frame, textvariable=username_text)
+        username_label = tk.Label(self.__top_frame, textvariable=username_text)
         username_label.grid(row=4, column=3)
-        self.__username = tk.Entry(self.__left_frame)
+        self.__username = tk.Entry(self.__top_frame)
         self.__username.grid(row=4, column=4)
 
         password_text = tk.StringVar()
         password_text.set("Password: ")
-        pasword_label = tk.Label(self.__left_frame, textvariable=password_text)
+        pasword_label = tk.Label(self.__top_frame, textvariable=password_text)
         pasword_label.grid(row=4, column=5)
-        self.__password = tk.Entry(self.__left_frame)
+        self.__password = tk.Entry(self.__top_frame)
         self.__password.grid(row=4, column=6)
 
 
 
         self.__table_headers = ["identifier", "association", "username", "header_4"]
-        self.__tree = ttk.Treeview(self.__right_frame, columns=self.__table_headers, show="headings")
+        self.__tree = ttk.Treeview(self.__bottom_frame, columns=self.__table_headers, show="headings")
 
 
         self.__db = Database()
@@ -111,6 +111,9 @@ class PwdGUI():
 
         self.__refresh_table()
         self.show_all()
+
+    def __delete_record(self):
+        pass
 
     def edit_pwd(self):
         pass
