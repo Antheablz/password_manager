@@ -70,15 +70,12 @@ class PwdGUI():
         self.__table_headers = ["identifier", "association", "username", "header_4"]
         self.__tree = ttk.Treeview(self.__bottom_frame, columns=self.__table_headers, show="headings")
 
-
         self.__db = Database()
         self.__db.connect(consts.PM_DB_URL)
 
-
-
         self.__tree.bind("<ButtonRelease-1>", self.__get_record_details)
 
-        self.show_all()
+        self.show_all_records()
 
     def __refresh_table(self):
         for i in self.__tree.get_children():
@@ -86,7 +83,7 @@ class PwdGUI():
 
     def __back_home(self):
         self.__refresh_table()
-        self.show_all()
+        self.show_all_records()
 
     def __create_table(self, passwords):
         self.__tree.heading(0, text=self.__table_headers[0])
@@ -117,17 +114,17 @@ class PwdGUI():
         self.__password.delete(0, "end")
 
         self.__refresh_table()
-        self.show_all()
+        self.show_all_records()
 
     def __delete_record(self):
         self.__db.delete_entry(self.__item_identifier)
         self.__refresh_table()
-        self.show_all()
+        self.show_all_records()
 
     def edit_pwd(self):
         pass
 
-    def show_all(self):
+    def show_all_records(self):
         passwords = self.__db.show_all()
         self.__create_table(passwords)
         
