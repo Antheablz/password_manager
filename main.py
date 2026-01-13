@@ -30,13 +30,13 @@ class PwdGUI():
         self.__bottom_frame.rowconfigure(1, weight=1)
 
 
-        self.__search_btn = tk.Button(self.__top_frame, text="Search", command=self.__search)
+        self.__search_btn = tk.Button(self.__top_frame, text="Search", command=self.__search_btn)
         self.__search_btn.grid(row=0, column=1)
         self.__search_entry = tk.Entry(self.__top_frame)
         self.__search_entry.grid(row=0, column=2)
 
-        self.__home_btn = tk.Button(self.__top_frame, text="Clear", command=self.__back_home)
-        self.__home_btn.grid(row=0, column=4)
+        self.__clear_btn = tk.Button(self.__top_frame, text="Clear", command=self.__back_home)
+        self.__clear_btn.grid(row=0, column=4)
 
         self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd")
         self.__delete_btn.grid(row=0, column=5)
@@ -96,7 +96,7 @@ class PwdGUI():
         self.__tree.pack()
 
 
-    def __search(self):
+    def __search_btn(self):
         passwords = self.__db.show_select(self.__search_entry.get())
         self.__refresh_table()
         self.__create_table(passwords)
