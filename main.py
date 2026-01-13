@@ -35,7 +35,7 @@ class PwdGUI():
         self.__search_entry = tk.Entry(self.__left_frame)
         self.__search_entry.grid(row=0, column=2)
 
-        self.__home_btn = tk.Button(self.__left_frame, text="Back Home", command=self.__back_home)
+        self.__home_btn = tk.Button(self.__left_frame, text="Clear", command=self.__back_home)
         self.__home_btn.grid(row=0, column=4)
 
         self.__delete_btn = tk.Button(self.__left_frame, text="Delete Pwd")
@@ -100,6 +100,7 @@ class PwdGUI():
         passwords = self.__db.show_select(self.__search_entry.get())
         self.__refresh_table()
         self.__create_table(passwords)
+        self.__search_entry.delete(0, "end")
 
     def __add_record(self):
         
