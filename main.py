@@ -67,7 +67,7 @@ class PwdGUI():
 
 
 
-        self.__table_headers = ["identifier", "association", "username", "header_4"]
+        self.__table_headers = ["identifier", "association", "username", "password (tmp)"]
         self.__tree = ttk.Treeview(self.__bottom_frame, columns=self.__table_headers, show="headings")
 
         self.__db = Database()
@@ -89,9 +89,10 @@ class PwdGUI():
         self.__tree.heading(0, text=self.__table_headers[0])
         self.__tree.heading(1, text=self.__table_headers[1])
         self.__tree.heading(2, text=self.__table_headers[2])
+        self.__tree.heading(3, text=self.__table_headers[3])
 
         for pwd in passwords:
-            self.__tree.insert("", tk.END, values=(pwd["identifier"], pwd["association"], pwd["username"]))
+            self.__tree.insert("", tk.END, values=(pwd["identifier"], pwd["association"], pwd["username"], pwd["password"]))
 
         self.__tree.pack()
 
@@ -121,7 +122,7 @@ class PwdGUI():
         self.__refresh_table()
         self.show_all_records()
 
-    def edit_pwd(self):
+    def __edit_pwd(self):
         pass
 
     def show_all_records(self):

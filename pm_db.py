@@ -11,7 +11,7 @@ from consts import DEFAULT_DB_URL, PM_DB_URL, DB_PM, PWD_TABLE_NAME
 
 
 class Base(DeclarativeBase):
-     pass
+    pass
 
 class PasswordEntry(Base):
     __tablename__ = PWD_TABLE_NAME
@@ -54,6 +54,12 @@ class Database:
         print('Connected to DB')
 
     def add_password(self, association: str, username: str, password: str):
+
+        # salt = uuid.uuid4().hex
+        salt = uuid.uuid4().bytes
+        hashed_obj = hashlib.sha256(salt + password.encode())
+        hashed_pwd = hashed_obj.hexdigest()
+
         query = insert(PasswordEntry).values(association=association, username=username, password=password)
         self.__execute(self.__session, query)
 
