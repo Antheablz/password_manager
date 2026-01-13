@@ -30,17 +30,16 @@ class PwdGUI():
         self.__bottom_frame.rowconfigure(1, weight=1)
 
 
-        self.__search_btn = tk.Button(self.__top_frame, text="Search", command=self.__search_btn)
-        self.__search_btn.grid(row=0, column=1)
+        self.__search_record = tk.Button(self.__top_frame, text="Search", command=self.__search_record)
+        self.__search_record.grid(row=0, column=1)
         self.__search_entry = tk.Entry(self.__top_frame)
         self.__search_entry.grid(row=0, column=2)
 
         self.__clear_btn = tk.Button(self.__top_frame, text="Clear", command=self.__back_home)
         self.__clear_btn.grid(row=0, column=4)
 
-        self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd")
+        self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd", command=self.__delete_record)
         self.__delete_btn.grid(row=0, column=5)
-
 
         self.__add_btn = tk.Button(self.__top_frame, text="Add Pwd", command=self.__add_record)
         self.__add_btn.grid(row=4, column=0)
@@ -75,6 +74,10 @@ class PwdGUI():
         self.__db = Database()
         self.__db.connect(consts.PM_DB_URL)
 
+
+
+        self.__tree.bind("<ButtonRelease-1>", self.__get_record_details)
+
         self.show_all()
 
     def __refresh_table(self):
@@ -95,15 +98,19 @@ class PwdGUI():
 
         self.__tree.pack()
 
+    def __get_record_details(self, event):
+        item = self.__tree.identify_row(event.y)
+        item_details = self.__tree.item(item)
+        self.__item_identifier = item_details['values'][0]
 
-    def __search_btn(self):
+
+    def __search_record(self):
         passwords = self.__db.show_select(self.__search_entry.get())
         self.__refresh_table()
         self.__create_table(passwords)
         self.__search_entry.delete(0, "end")
 
     def __add_record(self):
-        
         self.__db.add_password(self.__association.get(), self.__username.get(), self.__password.get())
         self.__association.delete(0, "end")
         self.__username.delete(0, "end")
@@ -113,7 +120,9 @@ class PwdGUI():
         self.show_all()
 
     def __delete_record(self):
-        pass
+        self.__db.delete_entry(self.__item_identifier)
+        self.__refresh_table()
+        self.show_all()
 
     def edit_pwd(self):
         pass
