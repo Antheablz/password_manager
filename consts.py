@@ -13,3 +13,5 @@ PWD_TABLE_NAME = "passwords"
 
 TABLE_WIDTH = 55
 TABLE_HEIGHT = 30
+
+SECRET_KEY = 'secret_password_key!!!'
