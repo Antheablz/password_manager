@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 import psycopg2
 import hashlib, uuid
+import os
+
 import sqlalchemy as db
 import sqlalchemy_utils as db_utils
 
 from sqlalchemy import *
 from sqlalchemy.orm import *
+
+from cryptography.fernet import Fernet
+from dotenv import load_dotenv
 
 from consts import DEFAULT_DB_URL, PM_DB_URL, DB_PM, PWD_TABLE_NAME
 
@@ -54,13 +59,28 @@ class Database:
         print('Connected to DB')
 
     def add_password(self, association: str, username: str, password: str):
+        # load_dotenv()
 
         # salt = uuid.uuid4().hex
-        salt = uuid.uuid4().bytes
-        hashed_obj = hashlib.sha256(salt + password.encode())
-        hashed_pwd = hashed_obj.hexdigest()
+        # salt = uuid.uuid4().bytes
+        # hashed_obj = hashlib.sha256(salt + password.encode())
+        # hashed_pwd = hashed_obj.hexdigest()
 
-        query = insert(PasswordEntry).values(association=association, username=username, password=password)
+        secret_key = os.environ['MY_SUPER_SECRET_SECRET']
+        fernet = Fernet(secret_key)
+
+        enc_password = fernet.encrypt(password.encode()).decode()
+        dec_password = fernet.decrypt(enc_password).decode()
+        
+
+        print(f"original passsword: {password}")
+        print(f"encrypted password: {enc_password}")
+        print(f"decrypted password: {dec_password}")
+
+        
+
+        # query = insert(PasswordEntry).values(association=association, username=username, password=password)
+        query = insert(PasswordEntry).values(association=association, username=username, password=enc_password)
         self.__execute(self.__session, query)
 
     def update_association(self, identifier: int, new_association: str):
