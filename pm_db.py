@@ -42,6 +42,15 @@ class Database:
         return result
 
     def __create_db(self):
+        """
+        Creates a new database
+
+        Args:
+            none
+        
+        Returns:
+            none
+        """
         default_engine = db.create_engine(DEFAULT_DB_URL, isolation_level='AUTOCOMMIT')
 
         session = Session(default_engine)
@@ -51,14 +60,41 @@ class Database:
         print('New DB Created')
 
     def __decrypt_password(self, enc_password: str):
+        """
+        Decrypts a given encrypted password
+
+        Args:
+            enc_password (string): an encrypted password
+        
+        Returns:
+            string: the decrypted plaintext string
+        """
         dec_password = self.__fernet.decrypt(enc_password).decode()
         return dec_password
     
     def __encrypt_password (self, password: str):
+        """
+        Encrypts a given plaintext password
+
+        Args:
+            password (string): a plaintext password
+        
+        Returns:
+            string: the encrypted  string
+        """
         enc_password = self.__fernet.encrypt(password.encode()).decode()
         return enc_password
 
     def connect(self, db_url: str):
+        """
+        connects to an existing database
+
+        Args:
+            db_url (string): the database url
+        
+        Returns:
+            none
+        """
         if db_utils.database_exists(db_url) == False:
             self.__create_db()
 
@@ -69,6 +105,17 @@ class Database:
         print('Connected to DB')
 
     def add_password(self, association: str, username: str, password: str):
+        """
+        Adds a password to the database
+
+        Args:
+            association (string): what the password is associated with
+            username (string): the corresponding username
+            password (string): the password to be entered
+
+        Returns:
+            none
+        """
         # load_dotenv()
         # print(f"original pass: {password}")
 
@@ -78,34 +125,100 @@ class Database:
         self.__execute(self.__session, query)
 
     def update_association(self, identifier: int, new_association: str):
+        """
+        Updates the association records are tied to
+
+        Args:
+            identifier (int): the unique record identification number
+            new_association (string): the corresponding association to be updated
+
+        Returns:
+            none
+        """
         query = update(PasswordEntry).where(PasswordEntry.identifier == identifier).values(association=new_association)
         self.__execute(self.__session, query)
 
     def update_password(self, identifier: int, new_password: str):
+        """
+        Updates a specific password
+
+        Args:
+            identifier (int): the unique record identification number
+            new_password (string): the corresponding new password to be updated
+
+        Returns:
+            none
+        """
         query = update(PasswordEntry).where(PasswordEntry.identifier == identifier).values(password=new_password)
         self.__execute(self.__session, query)
 
     def update_username(self, identifier: int, new_username: str):
+        """
+        Updates a specific username
+
+        Args:
+            identifier (int): the unique record identification number
+            new_username (string): the corresponding new username to be updated
+
+        Returns:
+            none
+        """
         query = update(PasswordEntry).where(PasswordEntry.identifier == identifier).values(username=new_username)
         self.__execute(self.__session, query)
 
     def delete_entry(self, identifier: int):
+        """
+        Deletes a record from the database
+
+        Args:
+            identifier (int): the unique record identification number
+
+        Returns:
+            none
+        """
         query = delete(PasswordEntry).where(PasswordEntry.identifier == identifier)
         self.__execute(self.__session, query)
 
     def show_all(self):
+        """
+        Retrieves all records from the database
+
+        Args:
+            none
+
+        Returns:
+            Sequence[RowMapping]: all the database records
+        """
         query = select('*').select_from(PasswordEntry)
         result = self.__execute(self.__session, query).mappings().fetchall()
 
         return result
 
     def show_select(self, identifier: str):
+        """
+        Retrieves a specific record row from the database
+
+        Args:
+            identifier (int): the unique record identification number
+
+        Returns:
+            Sequence[RowMapping]: the selected row from the database
+        """
         query = select('*').select_from(PasswordEntry).where(PasswordEntry.association.contains(identifier))
         result = self.__execute(self.__session, query).mappings().fetchall()
 
         return result
     
     def show_password(self, identifier: str):
+        """
+        Retrieves a specific decrypted password from a selected row from the database
+
+        Args:
+            identifier (int): the unique record identification number
+
+        Returns:
+            Sequence[RowMapping]: the selected decrypted password from the database
+        """
         query = select(column('password')).select_from(PasswordEntry).where(PasswordEntry.identifier == identifier)
         result = self.__execute(self.__session, query).mappings().fetchone()
         dec_password = self.__decrypt_password(result['password'])
