@@ -19,6 +19,15 @@ class Base(DeclarativeBase):
     pass
 
 class PasswordEntry(Base):
+    """
+    Class used to set up the database table.
+    
+    Attributes:
+        identifier (MappedColumn[Any]): the identifier column in the datatbase
+        association (MappedColumn[Any]): the association column in the datatbase
+        username (MappedColumn[Any]): the username column in the datatbase
+        password (MappedColumn[Any]): the password column in the datatbase
+    """
     __tablename__ = PWD_TABLE_NAME
 
     identifier = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -28,12 +37,28 @@ class PasswordEntry(Base):
 
 
 class Database:
+    """
+    Creates and manages a database
+    
+    Args:
+        none
+    """
     def __init__(self):
         self.__session = None
         self.__secret_key = os.environ['MY_SUPER_SECRET_SECRET']
         self.__fernet = Fernet(self.__secret_key)
 
     def __execute(self, session: Session, query: Query):
+        """
+        Executes a database query.
+
+        Args:
+            session (Session): the open database session
+            query (Query): the query to be executed
+
+        Returns:
+            Result[Any]: if the query successfully executed or not
+        """
         session.begin()
         result = session.execute(query)
         session.commit()
