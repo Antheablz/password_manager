@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import psycopg2
-import hashlib, uuid
 import os
 
 import sqlalchemy as db
@@ -10,7 +9,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 
 from cryptography.fernet import Fernet
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 from consts import DEFAULT_DB_URL, PM_DB_URL, DB_PM, PWD_TABLE_NAME
 
@@ -40,7 +39,7 @@ class Database:
     """
     Creates and manages a database
     """
-    
+
     def __init__(self):
         self.__session = None
         self.__secret_key = os.environ['MY_SUPER_SECRET_SECRET']
