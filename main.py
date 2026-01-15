@@ -10,41 +10,44 @@ from pm_db import Database, PasswordEntry
 
 class PwdGUI():
     def __init__(self):
+        button_width = 8
+        frame_padding = 20
+
         self.__root = tk.Tk()
         self.__root.title("Password Manager")
 
-        self.__root.columnconfigure(0, weight=1)
-        # self.__root.columnconfigure(1, weight=2)
-        self.__root.rowconfigure(0, weight=1)
+        self.__root.columnconfigure(0)
+        self.__root.rowconfigure(0)
+
+        # self.__root.columnconfigure(0, weight=1)
+        # self.__root.rowconfigure(0, weight=1)
 
         self.__top_frame = tk.Frame(self.__root) #frame is just a container
-        # self.__left_frame.grid(row=0, column=0, sticky=tk.NSEW)
-        self.__top_frame.grid(row=0, column=0)
-        self.__top_frame.columnconfigure(0, weight=1)
-        self.__top_frame.rowconfigure(1, weight=1)
+        self.__top_frame.grid(row=0, column=0, padx=frame_padding, pady=frame_padding)
+        # self.__top_frame.columnconfigure(0, weight=1)
+        # self.__top_frame.rowconfigure(1, weight=1)
 
         self.__bottom_frame = tk.Frame(self.__root) #frame is just a container
-        # self.__right_frame.grid(row=1, column=0, sticky=tk.NSEW)
-        self.__bottom_frame.grid(row=1, column=0)
-        self.__bottom_frame.columnconfigure(0, weight=1)
-        self.__bottom_frame.rowconfigure(1, weight=1)
+        self.__bottom_frame.grid(row=1, column=0, padx=frame_padding, pady=frame_padding)
+        # self.__bottom_frame.columnconfigure(0, weight=1)
+        # self.__bottom_frame.rowconfigure(1, weight=1)
 
 
-        self.__search_record = tk.Button(self.__top_frame, text="Search", command=self.__search_record)
+        self.__search_record = tk.Button(self.__top_frame, text="Search", width=button_width, command=self.__search_record)
         self.__search_record.grid(row=0, column=1)
         self.__search_entry = tk.Entry(self.__top_frame)
         self.__search_entry.grid(row=0, column=2)
 
-        self.__clear_btn = tk.Button(self.__top_frame, text="Clear", command=self.__back_home)
+        self.__clear_btn = tk.Button(self.__top_frame, text="Clear", width=button_width, command=self.__back_home)
         self.__clear_btn.grid(row=0, column=4)
 
-        self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd", command=self.__delete_record)
+        self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd", width=button_width, command=self.__delete_record)
         self.__delete_btn.grid(row=0, column=5)
 
-        self.__show_pwd_btn = tk.Button(self.__top_frame, text="Show Pwd", command=self.__show_password)
+        self.__show_pwd_btn = tk.Button(self.__top_frame, text="Show Pwd", width=button_width, command=self.__show_password)
         self.__show_pwd_btn.grid(row=0, column=6)
 
-        self.__add_btn = tk.Button(self.__top_frame, text="Add Pwd", command=self.__add_record)
+        self.__add_btn = tk.Button(self.__top_frame, text="Add Pwd", width=button_width, command=self.__add_record)
         self.__add_btn.grid(row=4, column=0)
         
         association_text = tk.StringVar()
@@ -68,8 +71,6 @@ class PwdGUI():
         self.__password = tk.Entry(self.__top_frame)
         self.__password.grid(row=4, column=6)
 
-
-
         self.__table_headers = ["identifier", "association", "username", "password (tmp)"]
         self.__tree = ttk.Treeview(self.__bottom_frame, columns=self.__table_headers, show="headings")
 
@@ -79,6 +80,11 @@ class PwdGUI():
         self.__tree.bind("<ButtonRelease-1>", self.__get_record_details)
 
         self.show_all_records()
+
+        # Sets a fixed window size
+        self.__root.update()
+        self.__root.minsize(self.__root.winfo_width(), self.__root.winfo_height())
+        self.__root.maxsize(self.__root.winfo_width(), self.__root.winfo_height())
 
     def __refresh_table(self):
         for i in self.__tree.get_children():
@@ -104,7 +110,7 @@ class PwdGUI():
         item_details = self.__tree.item(item)
         self.__item_identifier = item_details["values"][0]
 
-        self.__enc_password = item_details["values"][3]
+        # self.__enc_password = item_details["values"][3]
         # print(self.__enc_password)
 
 
