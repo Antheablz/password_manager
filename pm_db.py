@@ -39,10 +39,8 @@ class PasswordEntry(Base):
 class Database:
     """
     Creates and manages a database
-    
-    Args:
-        none
     """
+    
     def __init__(self):
         self.__session = None
         self.__secret_key = os.environ['MY_SUPER_SECRET_SECRET']

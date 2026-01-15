@@ -9,6 +9,10 @@ from tkinter import messagebox, ttk
 from pm_db import Database, PasswordEntry
 
 class PwdGUI():
+    """
+    Creates and manages the password manager's GUI
+    """
+    
     def __init__(self):
         button_width = 8
         frame_padding = 20
