@@ -209,7 +209,7 @@ class Database:
 
         return result
     
-    def show_password(self, identifier: str):
+    def show_password(self, identifier: int):
         """
         Retrieves a specific decrypted password from a selected row from the database
 
