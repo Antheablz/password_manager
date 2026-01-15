@@ -24,55 +24,55 @@ class PwdGUI():
 
         self.__top_frame = tk.Frame(self.__root) #frame is just a container
         self.__top_frame.grid(row=0, column=0, padx=frame_padding, pady=frame_padding)
-        # self.__top_frame.columnconfigure(0, weight=1)
-        # self.__top_frame.rowconfigure(1, weight=1)
-
-        self.__bottom_frame = tk.Frame(self.__root) #frame is just a container
-        self.__bottom_frame.grid(row=1, column=0, padx=frame_padding, pady=frame_padding)
         # self.__bottom_frame.columnconfigure(0, weight=1)
         # self.__bottom_frame.rowconfigure(1, weight=1)
 
+        self.__bottom_frame = tk.Frame(self.__root, highlightbackground="grey", highlightthickness=1, padx=frame_padding, pady=frame_padding) #frame is just a container
+        self.__bottom_frame.grid(row=1, column=0, padx=frame_padding, pady=frame_padding)
+        # self.__top_frame.columnconfigure(0, weight=1)
+        # self.__top_frame.rowconfigure(1, weight=1)
 
-        self.__search_record = tk.Button(self.__top_frame, text="Search", width=button_width, command=self.__search_record)
+
+        self.__search_record = tk.Button(self.__bottom_frame, text="Search", width=button_width, command=self.__search_record)
         self.__search_record.grid(row=0, column=1)
-        self.__search_entry = tk.Entry(self.__top_frame)
+        self.__search_entry = tk.Entry(self.__bottom_frame)
         self.__search_entry.grid(row=0, column=2)
 
-        self.__clear_btn = tk.Button(self.__top_frame, text="Clear", width=button_width, command=self.__back_home)
+        self.__clear_btn = tk.Button(self.__bottom_frame, text="Clear", width=button_width, command=self.__back_home)
         self.__clear_btn.grid(row=0, column=4)
 
-        self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd", width=button_width, command=self.__delete_record)
+        self.__delete_btn = tk.Button(self.__bottom_frame, text="Delete Pwd", width=button_width, command=self.__delete_record)
         self.__delete_btn.grid(row=0, column=5)
 
-        self.__show_pwd_btn = tk.Button(self.__top_frame, text="Show Pwd", width=button_width, command=self.__show_password)
+        self.__show_pwd_btn = tk.Button(self.__bottom_frame, text="Show Pwd", width=button_width, command=self.__show_password)
         self.__show_pwd_btn.grid(row=0, column=6)
 
-        self.__add_btn = tk.Button(self.__top_frame, text="Add Pwd", width=button_width, command=self.__add_record)
+        self.__add_btn = tk.Button(self.__bottom_frame, text="Add Pwd", width=button_width, command=self.__add_record)
         self.__add_btn.grid(row=4, column=0)
         
         association_text = tk.StringVar()
         association_text.set("Association: ")
-        association_label = tk.Label(self.__top_frame, textvariable=association_text)
+        association_label = tk.Label(self.__bottom_frame, textvariable=association_text)
         association_label.grid(row=4, column=1)
-        self.__association = tk.Entry(self.__top_frame)
+        self.__association = tk.Entry(self.__bottom_frame)
         self.__association.grid(row=4, column=2)
 
         username_text = tk.StringVar()
         username_text.set("Username: ")
-        username_label = tk.Label(self.__top_frame, textvariable=username_text)
+        username_label = tk.Label(self.__bottom_frame, textvariable=username_text)
         username_label.grid(row=4, column=3)
-        self.__username = tk.Entry(self.__top_frame)
+        self.__username = tk.Entry(self.__bottom_frame)
         self.__username.grid(row=4, column=4)
 
         password_text = tk.StringVar()
         password_text.set("Password: ")
-        pasword_label = tk.Label(self.__top_frame, textvariable=password_text)
+        pasword_label = tk.Label(self.__bottom_frame, textvariable=password_text)
         pasword_label.grid(row=4, column=5)
-        self.__password = tk.Entry(self.__top_frame)
+        self.__password = tk.Entry(self.__bottom_frame)
         self.__password.grid(row=4, column=6)
 
         self.__table_headers = ["identifier", "association", "username", "password (tmp)"]
-        self.__tree = ttk.Treeview(self.__bottom_frame, columns=self.__table_headers, show="headings")
+        self.__tree = ttk.Treeview(self.__top_frame, columns=self.__table_headers, show="headings")
 
         self.__db = Database()
         self.__db.connect(consts.PM_DB_URL)
