@@ -87,25 +87,61 @@ class PwdGUI():
         self.__root.maxsize(self.__root.winfo_width(), self.__root.winfo_height())
 
     def __refresh_table(self):
+        """
+        Refreshes elements in the table
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         for i in self.__tree.get_children():
             self.__tree.delete(i)
 
     def __back_home(self):
+        """
+        Callback for a button that clears search results in the table
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         self.__refresh_table()
         self.show_all_records()
 
-    def __create_table(self, passwords):
+    def __create_table(self, records: Sequence[RowMapping]):
+        """
+        Creates the table all database records are shown in
+
+        Args:
+            records (Sequence[RowMapping]): all of the records that will be listed in the table
+
+        Returns:
+            none
+        """
         self.__tree.heading(0, text=self.__table_headers[0])
         self.__tree.heading(1, text=self.__table_headers[1])
         self.__tree.heading(2, text=self.__table_headers[2])
         self.__tree.heading(3, text=self.__table_headers[3])
 
-        for pwd in passwords:
-            self.__tree.insert("", tk.END, values=(pwd["identifier"], pwd["association"], pwd["username"], pwd["password"]))
+        for rec in records:
+            self.__tree.insert("", tk.END, values=(rec["identifier"], rec["association"], rec["username"], rec["password"]))
 
         self.__tree.pack()
 
     def __get_record_details(self, event):
+        """
+        Callback that retrieves a rows record details
+
+        Args:
+            event: the mouse event triggering thhis callback
+
+        Returns:
+            none
+        """
         item = self.__tree.identify_row(event.y)
         item_details = self.__tree.item(item)
         self.__item_identifier = item_details["values"][0]
@@ -115,17 +151,44 @@ class PwdGUI():
 
 
     def __search_record(self):
+        """
+        Callback for a button that searches for a specific record
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         passwords = self.__db.show_select(self.__search_entry.get())
         self.__refresh_table()
         self.__create_table(passwords)
         self.__search_entry.delete(0, "end")
 
     def __delete_record(self):
+        """
+        Callback for a button that deletes a specific record row in the table
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         self.__db.delete_entry(self.__item_identifier)
         self.__refresh_table()
         self.show_all_records()
 
     def __add_record(self):
+        """
+        Callback for a button that adds a specific record row in the table
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         self.__db.add_password(self.__association.get(), self.__username.get(), self.__password.get())
         self.__association.delete(0, "end")
         self.__username.delete(0, "end")
@@ -135,6 +198,15 @@ class PwdGUI():
         self.show_all_records()
 
     def __show_password(self):
+        """
+        Callback for a button that opens a popup revealing a decrypted passsword
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         dec_password = self.__db.show_password(self.__item_identifier)
         messagebox.showinfo(title="password", message=dec_password)
 
@@ -142,11 +214,29 @@ class PwdGUI():
         pass
 
     def show_all_records(self):
+        """
+        Retrieves all the database records and creates a table to display them in
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         passwords = self.__db.show_all()
         self.__create_table(passwords)
         
 
     def mainloop(self):
+        """
+        Runs the gui mainloop
+
+        Args:
+            none
+
+        Returns:
+            none
+        """
         self.__root.mainloop()
 
 
