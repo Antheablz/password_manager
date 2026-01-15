@@ -4,7 +4,7 @@ import consts
 
 from prettytable import PrettyTable
 from sqlalchemy import *
-from tkinter import scrolledtext, ttk
+from tkinter import messagebox, ttk
 
 from pm_db import Database, PasswordEntry
 
@@ -40,6 +40,9 @@ class PwdGUI():
 
         self.__delete_btn = tk.Button(self.__top_frame, text="Delete Pwd", command=self.__delete_record)
         self.__delete_btn.grid(row=0, column=5)
+
+        self.__show_pwd_btn = tk.Button(self.__top_frame, text="Show Pwd", command=self.__show_password)
+        self.__show_pwd_btn.grid(row=0, column=6)
 
         self.__add_btn = tk.Button(self.__top_frame, text="Add Pwd", command=self.__add_record)
         self.__add_btn.grid(row=4, column=0)
@@ -99,7 +102,10 @@ class PwdGUI():
     def __get_record_details(self, event):
         item = self.__tree.identify_row(event.y)
         item_details = self.__tree.item(item)
-        self.__item_identifier = item_details['values'][0]
+        self.__item_identifier = item_details["values"][0]
+
+        self.__enc_password = item_details["values"][3]
+        # print(self.__enc_password)
 
 
     def __search_record(self):
@@ -107,6 +113,11 @@ class PwdGUI():
         self.__refresh_table()
         self.__create_table(passwords)
         self.__search_entry.delete(0, "end")
+
+    def __delete_record(self):
+        self.__db.delete_entry(self.__item_identifier)
+        self.__refresh_table()
+        self.show_all_records()
 
     def __add_record(self):
         self.__db.add_password(self.__association.get(), self.__username.get(), self.__password.get())
@@ -117,10 +128,9 @@ class PwdGUI():
         self.__refresh_table()
         self.show_all_records()
 
-    def __delete_record(self):
-        self.__db.delete_entry(self.__item_identifier)
-        self.__refresh_table()
-        self.show_all_records()
+    def __show_password(self):
+        dec_password = self.__db.show_password(self.__item_identifier)
+        messagebox.showinfo(title="password", message=dec_password)
 
     def __edit_pwd(self):
         pass

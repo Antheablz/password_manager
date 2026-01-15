@@ -30,6 +30,8 @@ class PasswordEntry(Base):
 class Database:
     def __init__(self):
         self.__session = None
+        self.__secret_key = os.environ['MY_SUPER_SECRET_SECRET']
+        self.__fernet = Fernet(self.__secret_key)
 
     def __execute(self, session: Session, query: Query):
         session.begin()
@@ -48,6 +50,14 @@ class Database:
 
         print('New DB Created')
 
+    def __decrypt_password(self, enc_password: str):
+        dec_password = self.__fernet.decrypt(enc_password).decode()
+        return dec_password
+    
+    def __encrypt_password (self, password: str):
+        enc_password = self.__fernet.encrypt(password.encode()).decode()
+        return enc_password
+
     def connect(self, db_url: str):
         if db_utils.database_exists(db_url) == False:
             self.__create_db()
@@ -60,26 +70,10 @@ class Database:
 
     def add_password(self, association: str, username: str, password: str):
         # load_dotenv()
+        # print(f"original pass: {password}")
 
-        # salt = uuid.uuid4().hex
-        # salt = uuid.uuid4().bytes
-        # hashed_obj = hashlib.sha256(salt + password.encode())
-        # hashed_pwd = hashed_obj.hexdigest()
+        enc_password = self.__encrypt_password(password)
 
-        secret_key = os.environ['MY_SUPER_SECRET_SECRET']
-        fernet = Fernet(secret_key)
-
-        enc_password = fernet.encrypt(password.encode()).decode()
-        dec_password = fernet.decrypt(enc_password).decode()
-        
-
-        print(f"original passsword: {password}")
-        print(f"encrypted password: {enc_password}")
-        print(f"decrypted password: {dec_password}")
-
-        
-
-        # query = insert(PasswordEntry).values(association=association, username=username, password=password)
         query = insert(PasswordEntry).values(association=association, username=username, password=enc_password)
         self.__execute(self.__session, query)
 
@@ -110,6 +104,13 @@ class Database:
         result = self.__execute(self.__session, query).mappings().fetchall()
 
         return result
+    
+    def show_password(self, identifier: str):
+        query = select(column('password')).select_from(PasswordEntry).where(PasswordEntry.identifier == identifier)
+        result = self.__execute(self.__session, query).mappings().fetchone()
+        dec_password = self.__decrypt_password(result['password'])
+
+        return dec_password
 
     def delete_db(self):
         pass
