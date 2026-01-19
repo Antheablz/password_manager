@@ -28,10 +28,15 @@ class PasswordEntry(Base):
         password (MappedColumn[Any]): the password column in the datatbase
     """
     __tablename__ = PWD_TABLE_NAME
+    __table_args__ = (
+        CheckConstraint("LENGTH(association) >= 3"),
+        CheckConstraint("LENGTH(username) >= 3"),
+        CheckConstraint("LENGTH(password) >= 3"),
+    )
 
     identifier = mapped_column(Integer, primary_key=True, autoincrement=True)
     association = mapped_column(String, nullable=False)
-    username = mapped_column(String, nullable=False, default="NULL")
+    username = mapped_column(String, nullable=False)
     password = mapped_column(String, nullable=False)
 
 
@@ -241,7 +246,7 @@ def main():
     # database.delete_db()
     database.connect(PM_DB_URL)
     # database.add_password("tmp_association", "tmp_name", "tmp_password")
-    database.add_password("tmp_association", "", "")
+    database.add_password("bruh", "bruh", "bruh")
     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
     # database.update_username(8, "new_username")
