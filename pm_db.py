@@ -31,7 +31,7 @@ class PasswordEntry(Base):
 
     identifier = mapped_column(Integer, primary_key=True, autoincrement=True)
     association = mapped_column(String, nullable=False)
-    username = mapped_column(String, nullable=False)
+    username = mapped_column(String, nullable=False, default="NULL")
     password = mapped_column(String, nullable=False)
 
 
@@ -63,24 +63,6 @@ class Database:
 
         return result
 
-    def __create_db(self):
-        """
-        Creates a new database
-
-        Args:
-            none
-        
-        Returns:
-            none
-        """
-        default_engine = db.create_engine(DEFAULT_DB_URL, isolation_level='AUTOCOMMIT')
-
-        session = Session(default_engine)
-        query = text(f'CREATE DATABASE {DB_PM}')
-        self.__execute(session, query)
-
-        print('New DB Created')
-
     def __decrypt_password(self, enc_password: str):
         """
         Decrypts a given encrypted password
@@ -109,7 +91,7 @@ class Database:
 
     def connect(self, db_url: str):
         """
-        connects to an existing database
+        connects to an existing database or creates a new one
 
         Args:
             db_url (string): the database url
@@ -117,8 +99,11 @@ class Database:
         Returns:
             none
         """
+
         if db_utils.database_exists(db_url) == False:
-            self.__create_db()
+            print('Creating DB')
+            db_utils.create_database(db_url)
+            print('New DB Created')
 
         engine = db.create_engine(db_url)
         Base.metadata.create_all(engine)
@@ -248,28 +233,31 @@ class Database:
         return dec_password
 
     def delete_db(self):
-        pass
+        db_utils.drop_database(url=PM_DB_URL)
+        
 
-# def main():
-#     database = Database()
-#     database.connect(PM_DB_URL)
-#     database.add_password("tmp_association", "tmp_name", "tmp_password")
-#     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
+def main():
+    database = Database()
+    # database.delete_db()
+    database.connect(PM_DB_URL)
+    # database.add_password("tmp_association", "tmp_name", "tmp_password")
+    database.add_password("tmp_association", "", "")
+    #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
-#     # database.update_username(8, "new_username")
-#     # database.update_username(1, "new_username")
-#     # database.update_username(2, "new_username2")
-#     # database.update_username(-3, "new_username")
-#     # for i in range(0,51):
-#     #     database.delete_entry(i)
+    # database.update_username(8, "new_username")
+    # database.update_username(1, "new_username")
+    # database.update_username(2, "new_username2")
+    # database.update_username(-3, "new_username")
+    # for i in range(0,51):
+    #     database.delete_entry(i)
    
 
-#     # database.update_password(4, "this_is_a_test!")
-#     # database.update_association(3, "JKJKJKJKJ   dddd")
-#     database.show_all()
-#     #database.show_select(1)
+    # database.update_password(4, "this_is_a_test!")
+    # database.update_association(3, "JKJKJKJKJ   dddd")
+    # database.show_all()
+    #database.show_select(1)
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
 
 
