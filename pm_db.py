@@ -265,10 +265,10 @@ class Database:
 
 def main():
     database = Database()
-    # database.delete_db()
+    database.delete_db()
     database.connect(PM_DB_URL)
-    # database.add_password("tmp_association", "tmp_name", "tmp_password")
-    database.add_record("bruh", "1", "bruh")
+    database.add_record("tmp_association", "tmp_name", "tmp_password")
+    # database.add_record("bruh", "1", "bruh")
     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
     # database.update_username(8, "new_username")
