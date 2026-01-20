@@ -1,5 +1,5 @@
 # Password Manager
-![example image](screenshot.png)
+![example image](screen_recording.gif)
 
 ## Description
 Password Manager is a simple tool used to securely store and manage your passwords.
