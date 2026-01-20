@@ -142,7 +142,9 @@ class Database:
         enc_password = self.__encrypt_password(password)
 
         query = insert(PasswordEntry).values(association=association, username=username, password=enc_password)
-        self.__execute(self.__session, query)
+        result = self.__execute(self.__session, query)
+
+        return result
 
     def update_association(self, identifier: int, new_association: str):
         """
