@@ -13,7 +13,7 @@ class PwdGUI():
     """
 
     def __init__(self):
-        button_width = 8
+        button_width = 9
         frame_padding = 20
 
         self.__root = tk.Tk()
@@ -22,19 +22,11 @@ class PwdGUI():
         self.__root.columnconfigure(0)
         self.__root.rowconfigure(0)
 
-        # self.__root.columnconfigure(0, weight=1)
-        # self.__root.rowconfigure(0, weight=1)
-
-        self.__top_frame = tk.Frame(self.__root) #frame is just a container
+        self.__top_frame = tk.Frame(self.__root)
         self.__top_frame.grid(row=0, column=0, padx=frame_padding, pady=frame_padding)
-        # self.__bottom_frame.columnconfigure(0, weight=1)
-        # self.__bottom_frame.rowconfigure(1, weight=1)
 
         self.__bottom_frame = tk.Frame(self.__root, highlightbackground="grey", highlightthickness=1, padx=frame_padding, pady=frame_padding) #frame is just a container
         self.__bottom_frame.grid(row=1, column=0, padx=frame_padding, pady=frame_padding)
-        # self.__top_frame.columnconfigure(0, weight=1)
-        # self.__top_frame.rowconfigure(1, weight=1)
-
 
         self.__search_record = tk.Button(self.__bottom_frame, text="Search", width=button_width, command=self.__search_record)
         self.__search_record.grid(row=0, column=1)
@@ -44,13 +36,13 @@ class PwdGUI():
         self.__clear_btn = tk.Button(self.__bottom_frame, text="Clear", width=button_width, command=self.__back_home)
         self.__clear_btn.grid(row=0, column=4)
 
-        self.__delete_btn = tk.Button(self.__bottom_frame, text="Delete Pwd", width=button_width, command=self.__delete_record)
+        self.__delete_btn = tk.Button(self.__bottom_frame, text="Delete Record", width=button_width, command=self.__delete_record)
         self.__delete_btn.grid(row=0, column=5)
 
-        self.__show_pwd_btn = tk.Button(self.__bottom_frame, text="Show Pwd", width=button_width, command=self.__show_password)
+        self.__show_pwd_btn = tk.Button(self.__bottom_frame, text="Show Record", width=button_width, command=self.__show_password)
         self.__show_pwd_btn.grid(row=0, column=6)
 
-        self.__add_btn = tk.Button(self.__bottom_frame, text="Add Pwd", width=button_width, command=self.__add_record)
+        self.__add_btn = tk.Button(self.__bottom_frame, text="Add Record", width=button_width, command=self.__add_record)
         self.__add_btn.grid(row=4, column=0)
         
         association_text = tk.StringVar()
