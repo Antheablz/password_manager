@@ -124,7 +124,7 @@ class Database:
         self.__session = Session(engine, autobegin=False, expire_on_commit=False)
         print('Connected to DB')
 
-    def add_password(self, association: str, username: str, password: str):
+    def add_record(self, association: str, username: str, password: str):
         """
         Adds a password to the database
 
@@ -259,15 +259,13 @@ def main():
     # database.delete_db()
     database.connect(PM_DB_URL)
     # database.add_password("tmp_association", "tmp_name", "tmp_password")
-    database.add_password("bruh", "1", "bruh")
+    database.add_record("bruh", "1", "bruh")
     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
     # database.update_username(8, "new_username")
     # database.update_username(1, "new_username")
     # database.update_username(2, "new_username2")
     # database.update_username(-3, "new_username")
-    # for i in range(0,51):
-    #     database.delete_entry(i)
    
 
     # database.update_password(4, "this_is_a_test!")
