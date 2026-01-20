@@ -251,6 +251,15 @@ class Database:
         return dec_password
 
     def delete_db(self):
+        """
+        Deletes the entire database
+        
+        Args:
+            none
+
+        Returns:
+            none
+        """
         db_utils.drop_database(url=PM_DB_URL)
         
 
