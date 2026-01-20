@@ -139,6 +139,9 @@ class Database:
         # load_dotenv()
         # print(f"original pass: {password}")
 
+        if len(password) < 3:
+            return None
+
         enc_password = self.__encrypt_password(password)
 
         query = insert(PasswordEntry).values(association=association, username=username, password=enc_password)
