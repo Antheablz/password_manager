@@ -61,12 +61,20 @@ class Database:
         Returns:
             Result[Any]: if the query successfully executed or not
         """
-        session.begin()
-        result = session.execute(query)
-        session.commit()
-        session.close()
 
-        return result
+        try:
+            session.begin()
+            result = session.execute(query)
+            session.commit()
+            session.close()
+
+            return result
+
+        except Exception as e:
+            print(f"Caught Exception: {e}")
+            session.close()
+
+            return None
 
     def __decrypt_password(self, enc_password: str):
         """
@@ -81,7 +89,7 @@ class Database:
         dec_password = self.__fernet.decrypt(enc_password).decode()
         return dec_password
     
-    def __encrypt_password (self, password: str):
+    def __encrypt_password(self, password: str):
         """
         Encrypts a given plaintext password
 
@@ -246,7 +254,7 @@ def main():
     # database.delete_db()
     database.connect(PM_DB_URL)
     # database.add_password("tmp_association", "tmp_name", "tmp_password")
-    database.add_password("bruh", "bruh", "bruh")
+    database.add_password("bruh", "1", "bruh")
     #database.add_password("UHGUHGUDH", "ugghhh", "ughhhhhh3")
     
     # database.update_username(8, "new_username")
