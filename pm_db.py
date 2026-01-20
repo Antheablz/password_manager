@@ -59,7 +59,7 @@ class Database:
             query (Query): the query to be executed
 
         Returns:
-            Result[Any]: if the query successfully executed or not
+            -1 on failure or query result object on success
         """
 
         try:
@@ -74,7 +74,7 @@ class Database:
             print(f"Caught Exception: {e}")
             session.close()
 
-            return None
+            return -1
 
     def __decrypt_password(self, enc_password: str):
         """
@@ -134,13 +134,13 @@ class Database:
             password (string): the password to be entered
 
         Returns:
-            none
+            -1 on failure or query result object on success
         """
         # load_dotenv()
         # print(f"original pass: {password}")
 
         if len(password) < 3:
-            return None
+            return -1
 
         enc_password = self.__encrypt_password(password)
 

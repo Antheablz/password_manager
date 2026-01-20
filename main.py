@@ -194,7 +194,7 @@ class PwdGUI():
         """
         result = self.__db.add_password(self.__association.get(), self.__username.get(), self.__password.get())
         
-        if result is None:
+        if result == -1:
             messagebox.showerror(title="password", message="Error Adding Record")
         
         self.__association.delete(0, "end")
