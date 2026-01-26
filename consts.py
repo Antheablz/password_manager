@@ -1,6 +1,6 @@
 
 USERNAME = 'postgres'
-PASSWORD = '9210'
+PASSWORD = '****'
 HOST = 'localhost'
 PORT = '5432'
 DB_DEFAULT = 'postgres'
